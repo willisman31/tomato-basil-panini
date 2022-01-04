@@ -1,5 +1,7 @@
 from getpass import getpass
 
+letters = {}
+
 def game():
     print("Welcome to Hangman")
     print("For single player, press 1")
@@ -10,6 +12,10 @@ def game():
     else:
         words = ["lobster", "tomato", "nth", "banana", "shoe", "monkey", "quotation", "rhythm", "matter", "senate", "letter", "program", "python"]
         secret = words.random()
+    word = ""
+    for i in secret:
+        word += "_ "
+    print(word)
     guesses = 0
     while guesses not 6 and guesses not -1:
         guesses = turn(secret, guesses)
@@ -23,11 +29,12 @@ def turn(secret, guesses):
     if guess in secret:
         print("Woot!  Good guess!")
         hang(guesses)
-
+        letters[guess] = True
     else:
         guesses += 1
         hang(guesses)
-        print("Only ")
+        letters[guess] = False
+        print(letters)
     return guesses
 
 def hang(var):
