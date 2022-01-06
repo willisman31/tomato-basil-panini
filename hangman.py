@@ -1,51 +1,54 @@
 from getpass import getpass
 import random
 
-letters = {}
-
+# Main gameplay
 def game():
     print("Welcome to Hangman")
     print("For single player, press 1")
     player = input("For two player, press 2\n")
-    if player == 2:
+    if player == '2' or player.casefold() == 'two':
         print("Player one, input your secret word: (with no spaces) ")
         secret = getpass()
     else:
         words = ['lobster', 'tomato', 'nth', 'banana', 'shoe', 'monkey', 'quotation', 'rhythm', 'matter', 'senate', 'letter', 'program', 'python']
         secret = random.choice(words)
-    word = ""
+    standing_guess = ""
     for i in secret:
-        word += "_ "
-    print(word)
+        standing_guess += "_ "
+    print(standing_guess)
     guesses = 0
-    while not guesses == 6 and not guesses == -1:
-        guesses = turn(secret, guesses, word)
-    if guesses == 6:
-        print("You have been unalived")
-    elif guesses == -1:
-        print("You have survived, but at what cost?")
+    letters = {}
+    while not guesses == -1 and not guesses == 6:
+        guess = input("Guess a letter: ")
+        if (secret.casefold().count(guess) > 0):
+            print("Good guess!")
+            hang(guesses)
+            start = 0
+            while True:
+                try:
+                    start = secret.casefold().index(guess, start,)
+                    standing_guess = standing_guess[:2 * start] + guess + " " + standing_guess[(2 * start) + 2:]
+                    start += 1
+                except ValueError:
+                    break
+            if standing_guess.count("_") == 0:
+                if guesses == 0:
+                    print("Good job!")
+                else:
+                    print("You've survived, but at what cost?")
+                guesses = -1
+        else:
+            print("No")
+            guesses += 1
+            hang(guesses)
+            letters[guess] : False
+            print(letters)
+            if guesses == 6:
+                print("You have been unalived")
+        print(standing_guess)
+    print("Game Over")
 
-def turn(secret, guesses, word):
-    guess = input("Guess a letter: ")
-    if guess in secret:
-        print("Woot!  Good guess!")
-        hang(guesses)
-        letters[guess] = True
-        find_replace(guess, secret, word, 0)
-    else:
-        guesses += 1
-        hang(guesses)
-        letters[guess] = False
-        print(letters)
-    return guesses
-
-def find_replace(guess, secret, guessed, start):
-    while not secret.index(guess, start,) == ValueError:
-        start = secret.index(guess, start,)
-        guessed = guessed[:start] + guess + guessed[start + 1:]
-        start += 1
-    return guessed
-
+# For Displaying Hangman Progress
 def hang(var):
   if var == 0:
       print("  __ ")
@@ -96,6 +99,5 @@ def hang(var):
       print(" | -|-")
       print(" | / \\")
       print("_|_____")
-      print("Oof")
 
 game()
