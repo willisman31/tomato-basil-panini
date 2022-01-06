@@ -10,7 +10,7 @@ def game():
         print("Player one, input your secret word: (with no spaces) ")
         secret = getpass()
     else:
-        words = ['lobster', 'tomato', 'nth', 'banana', 'shoe', 'monkey', 'quotation', 'rhythm', 'matter', 'senate', 'letter', 'program', 'python']
+        words = ['lobster', 'tomato', 'nth', 'banana', 'shoe', 'monkey', 'quotation', 'rhythm', 'matter', 'senate', 'letter', 'program', 'python', 'words', 'super', 'pineapple', 'lynx', 'mint', 'cinnamon']
         secret = random.choice(words)
     standing_guess = ""
     for i in secret:
@@ -19,7 +19,11 @@ def game():
     guesses = 0
     letters = {}
     while not guesses == -1 and not guesses == 6:
-        guess = input("Guess a letter: ")
+        try:
+            guess = input("Guess a letter: ")[0]
+        except IndexError:
+            print("Input required")
+            continue 
         if (secret.casefold().count(guess) > 0):
             print("Good guess!")
             hang(guesses)
